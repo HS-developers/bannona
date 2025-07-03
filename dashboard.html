@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>متابعة الدفع - صيانة المدفن</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- خطوط عربية -->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Cairo:wght@400;700&family=Lateef:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #e1eedd;
+      background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/islamic.png');
+      background-repeat: repeat;
+      background-size: 340px 340px;
+      margin: 0;
+      padding-top: 80px;
+      text-align: center;
+      min-height: 100vh;
+    }
+    .header {
+      background: linear-gradient(90deg, #127369 50%, #f6e58d 100%);
+      color: #fff;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      padding: 25px 10px 18px 10px;
+      position: fixed;
+      top: 0; right: 0; left: 0;
+      box-shadow: 0 4px 20px rgba(41,128,185,0.15);
+      z-index: 99;
+      user-select: none;
+      transition: background 0.5s;
+    }
+    .svg-border {
+      width:95%;max-width:700px;height:30px;display:block;margin: 0 auto 10px auto;
+    }
+    .svg-border-bottom {
+      width:95%;max-width:700px;height:30px;display:block;margin: 10px auto 0 auto;transform: scaleY(-1);
+    }
+    .quran-ayah {
+      font-family: 'Amiri Quran', serif;
+      font-size: 2.2em;
+      color: #127369;
+      margin: 22px 0 10px 0;
+      text-shadow: 0 1px 10px #d5d8dc;
+      letter-spacing: 1px;
+    }
+    .ayah-ref {
+      font-size: 1.2em;
+      color: #636e72;
+      margin-top: 4px;
+    }
+    h1, h3 {
+      color: #127369;
+      margin-bottom: 14px;
+    }
+    .box {
+      background: rgba(255,255,255,0.97);
+      margin: 40px auto 20px auto;
+      padding: 26px 18px 20px 18px;
+      border-radius: 18px;
+      box-shadow: 0 0 18px 3px rgba(52,152,219,0.13);
+      max-width: 650px;
+      animation: fadeIn 1.2s;
+    }
+    .button {
+      background: linear-gradient(to right, #6d0622, #575756);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 29px;
+      box-shadow: 0 2px 12px 0 rgba(52,152,219,0.11);
+      transition: background 0.3s, transform 0.2s;
+    }
+    .button:hover {
+      background: linear-gradient(to left, #127369, #f6e58d);
+      transform: scale(1.05);
+    }
+    table {
+      width: 100%;
+      margin-top: 16px;
+      border-collapse: collapse;
+      font-size: 21px;
+      box-shadow: 0 2px 10px rgba(41,128,185,0.06);
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+      transition: box-shadow 0.4s;
+      background: rgba(255,255,255,0.96);
+    }
+    th, td {
+      padding: 11px;
+      border: 1px solid #dfe6e9;
+      transition: background 0.3s;
+      text-align: center;
+    }
+    th {
+      background-color: #e1eedd;
+      font-weight: 700;
+      font-size: 17px;
+    }
+    .current-month {
+      background-color: #f6e58d !important;
+      font-weight: bold;
+      animation: highlight 1.4s;
+    }
+    .status-paid {
+      color: #16a085;
+      font-weight: bold;
+    }
+    .status-unpaid {
+      color: #c0392b;
+      font-weight: bold;
+    }
+    @keyframes highlight {
+      0% { background-color: #fff59e; }
+      100% { background-color: #f6e58d; }
+    }
+    .history {
+      text-align: right;
+      margin-top: 26px;
+    }
+    ul {
+      text-align: right;
+      padding-right: 20px;
+      margin-bottom: 16px;
+    }
+    .footer-dua {
+      font-size: 2.15em;
+      color: #127369;
+      margin: 34px 0 0 0;
+      background: #e1eedd;
+      padding: 18px 0 16px 0;
+      border-radius: 18px 18px 0 0;
+      box-shadow: 0 -2px 12px 0 rgba(52,152,219,0.09);
+      width: 100%;
+      font-family: 'Lateef', 'Amiri', 'Cairo', serif;
+      line-height: 1.8;
+      letter-spacing: 1px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    @media (max-width: 700px) {
+      .header { font-size: 1.3rem; padding: 18px 2px 12px 2px; }
+      .box { padding: 12px 3vw 10px 3vw; max-width: 99vw; }
+      table { font-size: 15px; }
+      .svg-border, .svg-border-bottom { height:20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">صيانات مدفن آل بنونه</div>
+  <!-- زخرفة إسلامية أعلى -->
+  <div class="svg-border">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:30px;display:block;">
+      <path fill="#127369" fill-opacity="0.18" d="M0,40 C360,80 1080,0 1440,40 L1440,60 L0,60 Z"></path>
+    </svg>
+  </div>
+  <!-- آية قرآنية بخط مصحف -->
+  <div class="quran-ayah">
+    ﴿ وَقُل رَّبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا ﴾
+  </div>
+  <div class="box" id="mainBox">
+    <h1 id="payerTitle"></h1>
+    <p>أنت مسجل باسم: <strong id="currentUser"></strong></p>
+    <button id="payButton" class="button" style="display:none;" onclick="markPaid()">تم الدفع</button>
+
+    <h3>جدول الدفع القادم:</h3>
+    <table id="scheduleTable">
+      <thead>
+        <tr>
+          <th>الشهر</th>
+          <th>اسم الدافع</th>
+          <th>حالة الدفع</th>
+        </tr>
+      </thead>
+      <tbody id="scheduleBody"></tbody>
+    </table>
+
+    <div class="history">
+      <h3>سجل الدفع:</h3>
+      <ul id="historyList"></ul>
+      <button class="button" onclick="exportToExcel()">تصدير السجل إلى Excel</button>
+    </div>
+  </div>
+  <!-- دعاء في الفوتر بخط Lateef -->
+  <div class="footer-dua">
+    اللهم اغفر لموتانا وارحمهم، وعافهم واعف عنهم، وأكرم نزلهم وأوسع مدخلهم وإغسلهم بالماء والثلج والبرد<br>
+    وألحقنا بهم في جنات النعيم يا أرحم الراحمين.
+  </div>
+  <!-- زخرفة إسلامية أسفل -->
+  <div class="svg-border-bottom">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:30px;display:block;transform:scaleY(-1);">
+      <path fill="#127369" fill-opacity="0.18" d="M0,40 C360,80 1080,0 1440,40 L1440,60 L0,60 Z"></path>
+    </svg>
+  </div>
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAFEG5oQGt5LoMaCpOakDlu8BVz7vKXAgo",
+      authDomain: "bannona-ee8ff.firebaseapp.com",
+      projectId: "bannona-ee8ff",
+      storageBucket: "bannona-ee8ff.firebasestorage.app",
+      messagingSenderId: "334387338389",
+      appId: "1:334387338389:web:cc07f20521e0670d1ecf9c",
+      measurementId: "G-GW6X74QF72"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const names = ["أبوالعزايم بنونه", "علي بنونه", "عادل بنونه", "عبد السلام بنونه", "محمود بنونه"];
+    const startDate = new Date("2025-07-01");
+    const today = new Date();
+    const fixedToday = new Date(today.getFullYear(), today.getMonth(), 15);
+    const monthsDiff = (fixedToday.getFullYear() - startDate.getFullYear()) * 12 + (fixedToday.getMonth() - startDate.getMonth());
+    const currentPayer = names[monthsDiff % names.length];
+
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) window.location.href = "index.html";
+
+    document.getElementById("payerTitle").innerText = "الدور هذا الشهر على أبناء: " + currentPayer;
+    document.getElementById("currentUser").innerText = currentUser;
+
+    if (normalize(currentUser) === normalize(currentPayer)) {
+      document.getElementById("payButton").style.display = "inline-block";
+    }
+
+    function normalize(str) {
+      return str.trim()
+                .replace(/أ|إ|آ/g, "ا")
+                .replace(/ى/g, "ي")
+                .replace(/ئ/g, "ي")
+                .replace(/ؤ/g, "و")
+                .replace(/\s+/g, "")
+                .toLowerCase();
+    }
+
+    let paymentsHistory = [];
+
+    async function getPaymentsHistory() {
+      const q = query(collection(db, "payments"), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
+      paymentsHistory = [];
+      querySnapshot.forEach((doc) => {
+        paymentsHistory.push(doc.data());
+      });
+    }
+
+    function sameMonthYear(date1, date2) {
+      return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth()
+      );
+    }
+
+    // توليد الجدول بحيث تظهر حالة الدفع فقط للشهر الحالي، ومع التاريخ
+    async function generateSchedule() {
+      await getPaymentsHistory();
+      const tableBody = document.getElementById("scheduleBody");
+      tableBody.innerHTML = "";
+      for (let i = 0; i < 5; i++) {
+        const futureDate = new Date(fixedToday.getFullYear(), fixedToday.getMonth() + i, 1);
+        const monthsSinceStart = (futureDate.getFullYear() - startDate.getFullYear()) * 12 + (futureDate.getMonth() - startDate.getMonth());
+        const payerName = names[monthsSinceStart % names.length];
+        const monthName = futureDate.toLocaleDateString("ar-EG", { month: "long", year: "numeric" });
+
+        let statusTd = "<td></td>";
+        if (i === 0) {
+          // فقط الشهر الحالي يظهر فيه حالة الدفع مع التاريخ
+          let paidEntry = null;
+          for (const entry of paymentsHistory) {
+            const [day, month, year] = entry.date.split('/');
+            const paymentDate = new Date(+year, +month - 1, +day);
+            if (
+              normalize(entry.name) === normalize(payerName) &&
+              sameMonthYear(paymentDate, futureDate)
+            ) {
+              paidEntry = entry;
+              break;
+            }
+          }
+          if (paidEntry) {
+            statusTd = `<td class="status-paid">تم الدفع بتاريخ: ${paidEntry.date}</td>`;
+          } else {
+            statusTd = `<td class="status-unpaid">لم يتم الدفع بعد</td>`;
+          }
+        }
+
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${monthName}</td><td>أبناء: ${payerName}</td>${statusTd}`;
+        if (i === 0) row.classList.add("current-month");
+        tableBody.appendChild(row);
+      }
+    }
+
+    generateSchedule();
+
+    async function markPaid() {
+      const password = prompt("من فضلك أدخل كلمة السر لتأكيد الدفع:");
+      if (password !== "4444") {
+        alert("❌ كلمة السر غير صحيحة. لم يتم تسجيل الدفع.");
+        return;
+      }
+
+      const entry = {
+        name: currentUser,
+        date: new Date().toLocaleDateString("ar-EG"),
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        await addDoc(collection(db, "payments"), entry);
+        alert("✅ تم تسجيل الدفع بنجاح");
+        await loadHistory();
+        await generateSchedule(); // إعادة توليد الجدول لتحديث الحالة
+      } catch (e) {
+        console.error("Error adding document: ", e);
+        alert("حدث خطأ أثناء التسجيل");
+      }
+    }
+    window.markPaid = markPaid;
+
+    async function loadHistory() {
+      const list = document.getElementById("historyList");
+      list.innerHTML = "";
+      const q = query(collection(db, "payments"), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const entry = doc.data();
+        const li = document.createElement("li");
+        li.textContent = `${entry.name} دفع بتاريخ ${entry.date}`;
+        list.appendChild(li);
+      });
+    }
+
+    loadHistory();
+
+    function exportToExcel() {
+      const rows = [["الاسم", "تاريخ الدفع", "الوقت الكامل"]];
+      getDocs(query(collection(db, "payments"), orderBy("timestamp", "desc"))).then(snapshot => {
+        snapshot.forEach(doc => {
+          const entry = doc.data();
+          rows.push([entry.name, entry.date, entry.timestamp]);
+        });
+
+        const csvContent = "\uFEFF" + rows.map(e => e.join(",")).join("\n"); // ← BOM لحل مشكلة العربية
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "سجل_الدفع.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    }
+
+    window.exportToExcel = exportToExcel;
+  </script>
+</body>
+</html>
