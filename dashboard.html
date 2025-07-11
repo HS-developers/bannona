@@ -364,17 +364,17 @@
     window.markPaid = markPaid;
 
     async function loadHistory() {
-      const list = document.getElementById("historyList");
-      list.innerHTML = "";
-      const q = query(collection(db, "payments"), orderBy("timestamp", "desc"));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        const entry = doc.data();
-        li = document.createElement("li");
-        li.textContent = `${entry.name} دفع بتاريخ ${entry.date}`;
-        list.appendChild(li);
-      });
-    }
+  const list = document.getElementById("historyList");
+  list.innerHTML = "";
+  const q = query(collection(db, "payments"), orderBy("timestamp", "desc"));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    const entry = doc.data();
+    let li = document.createElement("li");
+    li.textContent = `${entry.name} دفع بتاريخ ${entry.date}`;
+    list.appendChild(li);
+  });
+}
 
     loadHistory();
 
