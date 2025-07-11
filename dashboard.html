@@ -247,6 +247,12 @@
                 .toLowerCase();
     }
 
+    // لتحويل الأرقام الهندية إلى إنجليزية
+    function fixArabicNumber(str) {
+      if (!str) return "";
+      return str.replace(/[٠-٩]/g, d => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(d)]);
+    }
+
     let paymentsHistory = [];
 
     async function getPaymentsHistory() {
@@ -281,7 +287,8 @@
           // فقط الشهر الحالي يظهر فيه حالة الدفع مع التاريخ
           let paidEntry = null;
           for (const entry of paymentsHistory) {
-            const [day, month, year] = entry.date.split('/');
+            // استخدم fixArabicNumber لضمان قراءة التاريخ بشكل صحيح
+            const [day, month, year] = entry.date.split('/').map(fixArabicNumber);
             const paymentDate = new Date(+year, +month - 1, +day);
             if (
               normalize(entry.name) === normalize(payerName) &&
