@@ -238,7 +238,10 @@
     }
 
     function normalize(str) {
-      return str.trim()
+      // أزل كل الرموز غير المرئية + توحيد الحروف
+      return (str || "")
+                .replace(/[\u200E\u200F\u202A-\u202E\u061C]/g, "")
+                .trim()
                 .replace(/أ|إ|آ/g, "ا")
                 .replace(/ى/g, "ي")
                 .replace(/ئ/g, "ي")
@@ -247,9 +250,12 @@
                 .toLowerCase();
     }
 
-    // لتحويل الأرقام الهندية إلى إنجليزية
+    // دالة تنظيف قوية للأرقام والتواريخ
     function fixArabicNumber(str) {
       if (!str) return "";
+      // أزل أي رموز أو مسافات أو علامات RTL/LTR
+      str = str.replace(/[\u200E\u200F\u202A-\u202E\u061C]/g, "");
+      str = str.replace(/[^0-9٠-٩\/]/g, ""); // keep only numbers and /
       return str.replace(/[٠-٩]/g, d => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(d)]);
     }
 
@@ -287,9 +293,25 @@
           // فقط الشهر الحالي يظهر فيه حالة الدفع مع التاريخ
           let paidEntry = null;
           for (const entry of paymentsHistory) {
-            // استخدم fixArabicNumber لضمان قراءة التاريخ بشكل صحيح
             const [day, month, year] = entry.date.split('/').map(fixArabicNumber);
             const paymentDate = new Date(+year, +month - 1, +day);
+
+            // طباعة للتشخيص (يمكنك إزالتها بعد التأكد)
+            // console.log({
+            //   rawDate: entry.date,
+            //   fixedDay: day,
+            //   fixedMonth: month,
+            //   fixedYear: year,
+            //   paymentDate: paymentDate,
+            //   futureDate: futureDate,
+            //   entryName: entry.name,
+            //   payerName: payerName,
+            //   normEntry: normalize(entry.name),
+            //   normPayer: normalize(payerName),
+            //   sameName: normalize(entry.name) === normalize(payerName),
+            //   sameMonth: sameMonthYear(paymentDate, futureDate)
+            // });
+
             if (
               normalize(entry.name) === normalize(payerName) &&
               sameMonthYear(paymentDate, futureDate)
@@ -321,9 +343,11 @@
         return;
       }
 
+      // لتفادي مشاكل الأرقام الهندية أو علامات RTL في التاريخ، سجل التاريخ بالإنجليزية موحدة
       const entry = {
         name: currentUser,
-        date: new Date().toLocaleDateString("ar-EG"),
+        // استخدم صيغة تاريخ موحدة "YYYY-MM-DD" لسهولة المقارنة في المستقبل
+        date: new Date().toLocaleDateString("en-CA"), // مثال: 2025-07-11
         timestamp: new Date().toISOString()
       };
 
@@ -346,7 +370,7 @@
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const entry = doc.data();
-        const li = document.createElement("li");
+        li = document.createElement("li");
         li.textContent = `${entry.name} دفع بتاريخ ${entry.date}`;
         list.appendChild(li);
       });
